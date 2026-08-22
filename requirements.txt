@@ -1,0 +1,19 @@
+# CosyVoice3 免费 GPU 平台部署依赖清单（魔搭 Modelscope Studio / HuggingFace Spaces）
+# 平台会自动 pip install -r requirements.txt 来装环境。
+# 注意：torch / torchaudio / cuda 一般由平台镜像预装，不要在这里写死版本，避免装成 CPU 版。
+gradio==5.4.0
+numpy
+librosa
+modelscope
+funasr
+cosyvoice
+transformers
+huggingface_hub
+sentencepiece
+onnxruntime
+wetext
+hyperpyyaml
+PyYAML
+tqdm
+soundfile
+scipy

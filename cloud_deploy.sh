@@ -37,7 +37,16 @@ fi
 # 3) 安装依赖（requirements 已排除 torch，避免装成 CPU 版）
 $PY -m pip install --break-system-packages -r requirements.txt
 
-# 4) 模型与端口（按需改）：
+# 4) 拉取 cosyvoice 必须的 third_party 子模块（云端仓库默认不带 .git/modules）
+mkdir -p third_party
+if [ ! -d "third_party/Matcha-TTS/matcha" ]; then
+  echo "[部署] 正在下载 Matcha-TTS 子模块..."
+  rm -rf third_party/Matcha-TTS
+  git clone --depth 1 https://gitcode.com/gh_mirrors/cos/Matcha-TTS.git third_party/Matcha-TTS || \
+    git clone --depth 1 https://github.com/FunAudioLLM/Matcha-TTS.git third_party/Matcha-TTS
+fi
+
+# 5) 模型与端口（按需改）：
 #    - 想用 CosyVoice3 新模型，把下面改成 FunAudioLLM/Fun-CosyVoice3-0.5B-2512
 #    - 登录保护：取消注释下面两行并改成你的账号密码（防止别人白嫖你的额度）
 export COSYVOICE_MODEL_DIR="${COSYVOICE_MODEL_DIR:-iic/CosyVoice-300M}"
@@ -45,7 +54,7 @@ export PORT="${PORT:-7860}"
 # export COSYVOICE_USER=boss
 # export COSYVOICE_PASS=123456
 
-# 5) 启动（平台会把 7860 端口自动暴露成公网网址）
+# 6) 启动（平台会把 7860 端口自动暴露成公网网址）
 echo "[部署] 启动 CosyVoice，监听 0.0.0.0:$PORT"
 nohup $PY app.py > deploy.log 2>&1 &
 echo "[部署] 已后台启动，日志见 deploy.log"

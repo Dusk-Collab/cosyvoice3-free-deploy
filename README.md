@@ -48,3 +48,6 @@ hf_oauth: false
 
 ## 本地使用
 本地仍用 `webui.py` + 桌面 `.bat` 启动，与本仓库部署互不影响。
+
+## 给非技术用户的傻瓜版说明
+👉 **[小白使用说明.md](小白使用说明.md)** —— 纯大白话，讲清楚"以后聊天记录没了去哪找、云端那份没了怎么重新弄"。建议收藏本仓库网址：https://github.com/Dusk-Collab/cosyvoice3-free-deploy

@@ -19,7 +19,14 @@ else
 fi
 cd "$REPO_DIR"
 
-# 2) Python：云端 GPU 镜像通常已预装 torch+cuda；检测不到再补装
+# 2) 模型缓存放到工作空间“持久盘”（stop/start 后仍在，避免重复下载5GB）
+#    Cloud Studio 工作空间磁盘是持久化的，关机/休眠后文件保留；
+#    只有“手动重置工作空间”或“免费高性能版闲置>30天被回收”才会清空。
+#    把缓存写死在这个路径，确保每次部署都复用同一份模型，不重复下载。
+export MODELSCOPE_CACHE="${REPO_DIR}/.modelscope_cache"
+export HF_HOME="${REPO_DIR}/.hf_cache"
+
+# 3) Python：云端 GPU 镜像通常已预装 torch+cuda；检测不到再补装
 PY=python3
 if ! $PY -c "import torch; assert torch.cuda.is_available()" 2>/dev/null; then
   echo "[提示] 未检测到 CUDA，尝试安装 torch(GPU)…"

@@ -17,3 +17,4 @@ PyYAML
 tqdm
 soundfile
 scipy
+pyworld

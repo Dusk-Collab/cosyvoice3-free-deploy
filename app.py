@@ -19,6 +19,19 @@ import numpy as np
 # 关掉 Gradio 启动时的外网版本检查（免费平台上可能很慢/卡住，导致打不开）
 os.environ.setdefault("GRADIO_ANALYTICS_ENABLED", "False")
 
+# 修复 gradio_client 1.4.x 构建 API schema 时把 additionalProperties=True 当 dict 遍历的 bug
+#（Gradio 5.4.0 自带的 gradio_client==1.4.2 有此问题，会导致 TypeError）
+try:/n    import gradio_client.utils as _gc_utils
+    _gc_orig = _gc_utils._json_schema_to_python_type
+
+    def _gc_patched(schema, defs):
+        if isinstance(schema, bool):
+            return "Any"
+        return _gc_orig(schema, defs)
+
+    _gc_utils._json_schema_to_python_type = _gc_patched
+except Exception:/n    pass  # 新版已修或不存在时无需处理
+
 # 让 app.py 能 import 到同目录的 webui.py
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -55,7 +68,6 @@ launch_kwargs = dict(
     server_name='0.0.0.0',
     server_port=PORT,
     show_error=True,
-    share=False,
 )
 if auth_user and auth_pass:
     launch_kwargs['auth'] = [(auth_user, auth_pass)]

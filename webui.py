@@ -269,7 +269,7 @@ def build_demo():
         tts_text = gr.Textbox(label="输入要念的文字", lines=2, value='')
         with gr.Row():
             mode_checkbox_group = gr.Radio(choices=inference_mode_list, label='选择用法（怎么生成）', value=default_mode)
-            instruction_text = gr.Text(label="操作步骤（跟着做就行）", value=instruct_dict[default_mode], scale=0.5)
+            instruction_text = gr.Textbox(label="操作步骤（跟着做就行）", value=instruct_dict[default_mode], scale=0.5)
             sft_dropdown = gr.Dropdown(choices=sft_spk, label='选择音色', value=sft_spk[0], scale=0.25)
             stream = gr.Radio(choices=stream_mode_list, label='是否边生成边播放', value='否')
             speed = gr.Number(value=1, label="语速(0.5慢~2.0快)", minimum=0.5, maximum=2.0, step=0.1)

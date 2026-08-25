@@ -21,7 +21,8 @@ os.environ.setdefault("GRADIO_ANALYTICS_ENABLED", "False")
 
 # 修复 gradio_client 1.4.x 构建 API schema 时把 additionalProperties=True 当 dict 遍历的 bug
 #（Gradio 5.4.0 自带的 gradio_client==1.4.2 有此问题，会导致 TypeError）
-try:/n    import gradio_client.utils as _gc_utils
+try:
+    import gradio_client.utils as _gc_utils
     _gc_orig = _gc_utils._json_schema_to_python_type
 
     def _gc_patched(schema, defs):
@@ -30,7 +31,8 @@ try:/n    import gradio_client.utils as _gc_utils
         return _gc_orig(schema, defs)
 
     _gc_utils._json_schema_to_python_type = _gc_patched
-except Exception:/n    pass  # 新版已修或不存在时无需处理
+except Exception:
+    pass  # 新版已修或不存在时无需处理
 
 # 让 app.py 能 import 到同目录的 webui.py
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))

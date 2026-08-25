@@ -18,3 +18,4 @@ tqdm
 soundfile
 scipy
 pyworld
+gradio_client>=1.6.0

@@ -19,6 +19,12 @@ else
 fi
 cd "$REPO_DIR"
 
+# 让 Cloud Studio 打开工作空间时自动启动 CosyVoice（复制到工作空间根 .vscode）
+mkdir -p "$HOME/.vscode"
+if [ -f "$REPO_DIR/.vscode/preview.yml" ]; then
+  cp -f "$REPO_DIR/.vscode/preview.yml" "$HOME/.vscode/preview.yml"
+fi
+
 # 2) 模型缓存放到工作空间“持久盘”（stop/start 后仍在，避免重复下载5GB）
 #    Cloud Studio 工作空间磁盘是持久化的，关机/休眠后文件保留；
 #    只有“手动重置工作空间”或“免费高性能版闲置>30天被回收”才会清空。

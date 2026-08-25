@@ -43,6 +43,8 @@ fi
 # 3) 安装依赖（requirements 已排除 torch，避免装成 CPU 版）
 $PY -m pip install --break-system-packages --upgrade "gradio_client>=1.6.0,<2.0.0"  # 修复 Gradio 5.4.0 API schema 的 TypeError
 $PY -m pip install --break-system-packages -r requirements.txt
+# 强制锁定 gradio_client 为 1.14.0（Gradio 5.4.0 自带的旧版本有 bool schema bug）
+$PY -m pip install --break-system-packages --no-deps --force-reinstall "gradio_client==1.14.0"
 
 # 4) cosyvoice 需要 third_party/Matcha-TTS。仓库若已含源码（我们已上传）直接复用，
 #    仅在缺失时才运行时 clone 兜底（网络可能不稳定，不要覆盖已上传版本）。

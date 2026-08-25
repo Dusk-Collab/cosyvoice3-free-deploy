@@ -1,0 +1,8 @@
+autoOpen: true
+apps:
+  - port: 7860
+    run: "if [ ! -d ~/cosyvoice-deploy/.git ]; then git clone https://github.com/Dusk-Collab/cosyvoice3-free-deploy.git ~/cosyvoice-deploy; fi; cd ~/cosyvoice-deploy && bash cloud_deploy.sh"
+    root: ~/cosyvoice-deploy
+    name: CosyVoice3
+    description: CosyVoice3 语音合成（打开工作空间自动启动）
+    autoOpen: true

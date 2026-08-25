@@ -55,7 +55,6 @@ launch_kwargs = dict(
     server_name='0.0.0.0',
     server_port=PORT,
     show_error=True,
-    api_open=False,  # 关闭 /api 文档，绕过 gradio_client 1.5.x 构建 schema 的 TypeError
 )
 if auth_user and auth_pass:
     launch_kwargs['auth'] = [(auth_user, auth_pass)]

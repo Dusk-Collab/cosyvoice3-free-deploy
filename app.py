@@ -22,6 +22,11 @@ os.environ.setdefault("GRADIO_ANALYTICS_ENABLED", "False")
 # 让 app.py 能 import 到同目录的 webui.py
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+# 云端部署时， cosyvoice 需要 third_party/Matcha-TTS 子模块才能 import matcha.models
+_MATCHA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'third_party', 'Matcha-TTS')
+if os.path.isdir(_MATCHA_DIR):
+    sys.path.insert(0, _MATCHA_DIR)
+
 import webui  # noqa: E402
 
 # 1) 决定模型位置：默认用魔搭模型库 ID，平台首次运行会自动下载（免费、不占你电脑空间）

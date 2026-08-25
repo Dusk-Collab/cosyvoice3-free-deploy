@@ -3,7 +3,7 @@
 # CosyVoice 云端 GPU 一键部署脚本
 # 适用：腾讯云 Cloud Studio / 魔搭 Studio / 任意 Linux GPU 工作区
 # 用法：把本脚本放到工作区，终端执行  bash cloud_deploy.sh
-# 特点：不用时平台自动休眠/关机 → 不计费、不计时间
+# 特点：用完请点平台「定时关机」或手动关机 → 停止计费（详见 CLOUD_DEPLOY.md 防忘关机）
 # ============================================================
 set -e
 echo "===== CosyVoice 云端部署开始 ====="
@@ -72,7 +72,22 @@ sleep 3
 echo "[部署] 启动 CosyVoice，监听 0.0.0.0:$PORT"
 nohup $PY app.py > deploy.log 2>&1 &
 echo "[部署] 已后台启动，日志见 deploy.log"
+
+# ---- 防忘关机：启动“看门狗”（可选，默认关闭）----
+# 设了 AUTO_SHUTDOWN_IDLE_MINUTES>0 才生效；空闲到点后尽力关停工作空间。
+# 最可靠还是平台自带「定时关机」按钮（编辑界面顶部栏）——务必每次启动后设一下。
+if [ "${AUTO_SHUTDOWN_IDLE_MINUTES:-0}" -gt 0 ] 2>/dev/null; then
+  nohup bash "$REPO_DIR/auto_shutdown.sh" >> deploy.log 2>&1 &
+  echo "[防忘关机] 看门狗已启动：空闲 ${AUTO_SHUTDOWN_IDLE_MINUTES} 分钟后尝试自动关停"
+fi
+
 sleep 10
 echo "===== 启动日志（最后 20 行）====="
 tail -n 20 deploy.log
+echo ""
+echo "===== ⚠️ 防忘关机（重要）====="
+echo "工作空间『运行中』就一直烧额度！请用下面任一方式停止计费："
+echo "  1) 最稳：点编辑界面顶部栏『设置定时关机』，选 2~4 小时，到点无条件硬关机；"
+echo "  2) 用完手动点『关机』按钮；"
+echo "  3) 关掉浏览器标签页，等 10 分钟自动关（前提是没保持心跳）。"
 echo "===== 完成后在平台点“访问 / 公开链接”即可拿到公网网址 ====="

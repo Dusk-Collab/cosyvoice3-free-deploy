@@ -41,6 +41,7 @@ if ! $PY -c "import torch; assert torch.cuda.is_available()" 2>/dev/null; then
 fi
 
 # 3) 安装依赖（requirements 已排除 torch，避免装成 CPU 版）
+$PY -m pip install --break-system-packages --upgrade "gradio_client>=1.6.0"  # 修复 Gradio 5.4.0 API schema 的 TypeError
 $PY -m pip install --break-system-packages -r requirements.txt
 
 # 4) cosyvoice 需要 third_party/Matcha-TTS。仓库若已含源码（我们已上传）直接复用，
@@ -64,6 +65,11 @@ export PORT="${PORT:-7860}"
 # export COSYVOICE_PASS=123456
 
 # 6) 启动（平台会把 7860 端口自动暴露成公网网址）
+# 清理占用 $PORT 的旧进程，确保新代码真正生效（不杀的话老进程会一直占着端口）
+echo "[部署] 清理占用 $PORT 的旧进程..."
+if command -v fuser >/dev/null 2>&1; then fuser -k ${PORT}/tcp 2>/dev/null || true; fi
+pkill -f "app.py" 2>/dev/null || true
+sleep 3
 echo "[部署] 启动 CosyVoice，监听 0.0.0.0:$PORT"
 nohup $PY app.py > deploy.log 2>&1 &
 echo "[部署] 已后台启动，日志见 deploy.log"

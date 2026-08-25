@@ -1,7 +1,6 @@
 # ===== 本地环境 / 大模型（不进仓库，平台会自动下载或本地自带）=====
 py312/
 pretrained_models/
-cosyvoice/
 runtime/
 third_party/
 modelscope/
@@ -13,6 +12,12 @@ tmp/
 tools/
 __pycache__/
 *.pyc
+
+# cosyvoice 源码本身很小（约2MB），需要进仓库，云端才能导入
+# 注意：模型权重由平台根据 COSYVOICE_MODEL_DIR 自动下载，不要手动传 pretrained_models/
+
+# 本地嵌套副本（23GB，含模型/环境），绝不可进仓库
+CosyVoice3_AIBL/
 
 # ===== 本地说明 / 脚本（非部署必需）=====
 启动.bat

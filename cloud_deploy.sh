@@ -41,7 +41,7 @@ if ! $PY -c "import torch; assert torch.cuda.is_available()" 2>/dev/null; then
 fi
 
 # 3) 安装依赖（requirements 已排除 torch，避免装成 CPU 版）
-$PY -m pip install --break-system-packages --upgrade "gradio_client>=1.6.0"  # 修复 Gradio 5.4.0 API schema 的 TypeError
+$PY -m pip install --break-system-packages --upgrade "gradio_client>=1.6.0,<2.0.0"  # 修复 Gradio 5.4.0 API schema 的 TypeError
 $PY -m pip install --break-system-packages -r requirements.txt
 
 # 4) cosyvoice 需要 third_party/Matcha-TTS。仓库若已含源码（我们已上传）直接复用，

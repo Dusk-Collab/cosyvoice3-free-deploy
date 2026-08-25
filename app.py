@@ -55,6 +55,7 @@ launch_kwargs = dict(
     server_name='0.0.0.0',
     server_port=PORT,
     show_error=True,
+    share=False,
 )
 if auth_user and auth_pass:
     launch_kwargs['auth'] = [(auth_user, auth_pass)]

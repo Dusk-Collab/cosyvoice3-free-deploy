@@ -96,7 +96,7 @@ instruct_dict = {
     '跨语种复刻': '用参考音频的声音，念另一种语言的文字：\n① 上传或录制一段参考音频，不超过30秒\n② 在「输入要念的文字」填和参考音频不同语言的文字\n③ 点【生成音频】',
     '自然语言控制': '用文字描述想要的效果：\n① 选一个预训练音色\n② 在「想要的效果」里写，例如：用四川话说 / 语速慢一点 / 开心地念\n③ 点【生成音频】'
 }
-stream_mode_list = [('否', False), ('是', True)]
+stream_mode_list = ['否', '是']
 max_val = 0.8
 
 
@@ -114,6 +114,8 @@ def change_instruction(mode_checkbox_group):
 
 def generate_audio(tts_text, mode_checkbox_group, sft_dropdown, prompt_text, prompt_wav_upload, prompt_wav_record, instruct_text,
                    seed, stream, speed):
+    # Gradio 5.4.0 对 Radio value=False 构建 API schema 会报错，云端用字符串接收再转 bool
+    stream = (stream == '是')
     if prompt_wav_upload is not None:
         prompt_wav = prompt_wav_upload
     elif prompt_wav_record is not None:
@@ -269,7 +271,7 @@ def build_demo():
             mode_checkbox_group = gr.Radio(choices=inference_mode_list, label='选择用法（怎么生成）', value=default_mode)
             instruction_text = gr.Text(label="操作步骤（跟着做就行）", value=instruct_dict[default_mode], scale=0.5)
             sft_dropdown = gr.Dropdown(choices=sft_spk, label='选择音色', value=sft_spk[0], scale=0.25)
-            stream = gr.Radio(choices=stream_mode_list, label='是否边生成边播放', value=stream_mode_list[0][1])
+            stream = gr.Radio(choices=stream_mode_list, label='是否边生成边播放', value='否')
             speed = gr.Number(value=1, label="语速(0.5慢~2.0快)", minimum=0.5, maximum=2.0, step=0.1)
             with gr.Column(scale=0.25):
                 seed_button = gr.Button(value="\U0001F3B2")

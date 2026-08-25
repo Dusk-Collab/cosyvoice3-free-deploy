@@ -37,10 +37,13 @@ fi
 # 3) 安装依赖（requirements 已排除 torch，避免装成 CPU 版）
 $PY -m pip install --break-system-packages -r requirements.txt
 
-# 4) 拉取 cosyvoice 必须的 third_party 子模块（云端仓库默认不带 .git/modules）
+# 4) cosyvoice 需要 third_party/Matcha-TTS。仓库若已含源码（我们已上传）直接复用，
+#    仅在缺失时才运行时 clone 兜底（网络可能不稳定，不要覆盖已上传版本）。
 mkdir -p third_party
-if [ ! -d "third_party/Matcha-TTS/matcha" ]; then
-  echo "[部署] 正在下载 Matcha-TTS 子模块..."
+if [ -d "third_party/Matcha-TTS/matcha" ]; then
+  echo "[部署] 检测到仓库自带 Matcha-TTS 源码，直接复用（跳过下载）"
+else
+  echo "[部署] 仓库缺 Matcha-TTS，运行时下载..."
   rm -rf third_party/Matcha-TTS
   git clone --depth 1 https://gitcode.com/gh_mirrors/cos/Matcha-TTS.git third_party/Matcha-TTS || \
     git clone --depth 1 https://github.com/FunAudioLLM/Matcha-TTS.git third_party/Matcha-TTS

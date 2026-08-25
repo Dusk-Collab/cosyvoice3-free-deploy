@@ -8,10 +8,14 @@
 set -e
 echo "===== CosyVoice 云端部署开始 ====="
 
-# 1) 代码：克隆我们已推到 GitHub 的仓库（含 app.py / webui.py / requirements.txt）
+# 1) 代码：克隆/更新我们已推到 GitHub 的仓库（含 app.py / webui.py / requirements.txt）
 REPO_DIR="${HOME}/cosyvoice-deploy"
-if [ ! -d "$REPO_DIR" ]; then
+if [ ! -d "$REPO_DIR/.git" ]; then
+  rm -rf "$REPO_DIR"
   git clone https://github.com/Dusk-Collab/cosyvoice3-free-deploy.git "$REPO_DIR"
+else
+  echo "[更新] 拉取最新代码..."
+  git -C "$REPO_DIR" pull origin main
 fi
 cd "$REPO_DIR"
 
